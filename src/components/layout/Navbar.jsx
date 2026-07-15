@@ -1,8 +1,10 @@
-import { useState } from "react";
-import { Menu, X, ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, Menu, X } from "lucide-react";
 import { NavLink } from "react-router-dom";
+import Logo from "../common/Logo";
 
-const navLinks = [
+const navigation = [
   { label: "Home", path: "/" },
   { label: "Services", path: "/services" },
   { label: "About", path: "/about" },
@@ -13,95 +15,118 @@ const navLinks = [
 
 function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 12);
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white/90 backdrop-blur-md">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
-        <NavLink to="/" className="flex items-center gap-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600 text-xl font-bold text-white">
-            N
-          </div>
+    <header
+      className={`sticky top-0 z-50 border-b transition ${
+        scrolled
+          ? "border-slate-200 bg-white/95 shadow-sm backdrop-blur-xl"
+          : "border-transparent bg-white/85 backdrop-blur-lg"
+      }`}
+    >
+      <nav
+        className="section-container flex min-h-20 items-center justify-between"
+        aria-label="Main navigation"
+      >
+        <Logo />
 
-          <div>
-            <p className="font-['Space_Grotesk'] text-xl font-bold text-slate-950">
-              Nexovora
-            </p>
-            <p className="text-xs text-slate-500">
-              Creating Digital Excellence
-            </p>
-          </div>
-        </NavLink>
-
-        <nav className="hidden items-center gap-7 lg:flex">
-          {navLinks.map((link) => (
+        <div className="hidden items-center gap-7 lg:flex">
+          {navigation.map((item) => (
             <NavLink
-              key={link.path}
-              to={link.path}
+              key={item.path}
+              to={item.path}
               className={({ isActive }) =>
-                `text-sm font-semibold transition ${
+                `focus-visible-ring relative rounded-md py-2 text-sm font-semibold transition ${
                   isActive
                     ? "text-blue-600"
                     : "text-slate-700 hover:text-blue-600"
                 }`
               }
             >
-              {link.label}
+              {({ isActive }) => (
+                <>
+                  {item.label}
+
+                  {isActive && (
+                    <motion.span
+                      layoutId="active-navigation"
+                      className="absolute inset-x-0 -bottom-1 mx-auto h-0.5 w-5 rounded-full bg-blue-600"
+                    />
+                  )}
+                </>
+              )}
             </NavLink>
           ))}
-        </nav>
-
-        <div className="hidden lg:block">
-          <NavLink
-            to="/contact"
-            className="inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-blue-700"
-          >
-            Let's Talk
-            <ArrowRight size={17} />
-          </NavLink>
         </div>
+
+        <NavLink
+          to="/contact"
+          className="focus-visible-ring hidden items-center gap-2 rounded-xl bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 lg:inline-flex"
+        >
+          Let&apos;s Talk
+          <ArrowRight size={17} />
+        </NavLink>
 
         <button
           type="button"
-          onClick={() => setMenuOpen((current) => !current)}
-          className="rounded-lg border border-slate-200 p-2 text-slate-800 lg:hidden"
-          aria-label="Toggle navigation menu"
+          onClick={() => setMenuOpen((previous) => !previous)}
+          className="focus-visible-ring rounded-xl border border-slate-200 bg-white p-2.5 text-slate-800 shadow-sm lg:hidden"
+          aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"}
           aria-expanded={menuOpen}
         >
-          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+          {menuOpen ? <X size={23} /> : <Menu size={23} />}
         </button>
-      </div>
+      </nav>
 
-      {menuOpen && (
-        <nav className="border-t border-slate-200 bg-white px-5 py-5 lg:hidden">
-          <div className="mx-auto flex max-w-7xl flex-col gap-4">
-            {navLinks.map((link) => (
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={reduceMotion ? undefined : { opacity: 0, height: 0 }}
+            className="overflow-hidden border-t border-slate-200 bg-white lg:hidden"
+          >
+            <div className="section-container flex flex-col gap-2 py-5">
+              {navigation.map((item) => (
+                <NavLink
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setMenuOpen(false)}
+                  className={({ isActive }) =>
+                    `focus-visible-ring rounded-xl px-4 py-3 text-sm font-semibold transition ${
+                      isActive
+                        ? "bg-blue-50 text-blue-600"
+                        : "text-slate-700 hover:bg-slate-50"
+                    }`
+                  }
+                >
+                  {item.label}
+                </NavLink>
+              ))}
+
               <NavLink
-                key={link.path}
-                to={link.path}
+                to="/contact"
                 onClick={() => setMenuOpen(false)}
-                className={({ isActive }) =>
-                  `rounded-lg px-3 py-2 font-semibold ${
-                    isActive
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-slate-700 hover:bg-slate-50"
-                  }`
-                }
+                className="focus-visible-ring mt-3 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white"
               >
-                {link.label}
+                Let&apos;s Talk
+                <ArrowRight size={17} />
               </NavLink>
-            ))}
-
-            <NavLink
-              to="/contact"
-              onClick={() => setMenuOpen(false)}
-              className="mt-2 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white"
-            >
-              Let's Talk
-              <ArrowRight size={17} />
-            </NavLink>
-          </div>
-        </nav>
-      )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

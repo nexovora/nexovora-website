@@ -3,9 +3,9 @@ import {
   FaFacebookF,
   FaInstagram,
   FaLinkedinIn,
-  FaXTwitter,
 } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
+import Logo from "../common/Logo";
 
 const quickLinks = [
   { label: "Home", path: "/" },
@@ -25,6 +25,13 @@ const services = [
   "Resume & LinkedIn",
 ];
 
+const resources = [
+  "Blog",
+  "FAQs",
+  "Privacy Policy",
+  "Terms & Conditions",
+];
+
 const socialLinks = [
   {
     label: "Facebook",
@@ -41,29 +48,18 @@ const socialLinks = [
     href: "https://www.linkedin.com/",
     icon: FaLinkedinIn,
   },
-  {
-    label: "X",
-    href: "https://x.com/",
-    icon: FaXTwitter,
-  },
 ];
 
 function Footer() {
   return (
-    <footer className="bg-[#06142E] px-5 py-14 text-white lg:px-8">
-      <div className="mx-auto grid max-w-7xl gap-10 md:grid-cols-2 lg:grid-cols-4">
-        <div>
-          <h2 className="font-['Space_Grotesk'] text-2xl font-bold">
-            Nexovora
-          </h2>
+    <footer className="bg-[#06142E] text-white">
+      <div className="section-container grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
+        <div className="lg:col-span-1">
+          <Logo light />
 
-          <p className="mt-2 text-sm text-blue-200">
-            Creating Digital Excellence
-          </p>
-
-          <p className="mt-5 max-w-sm text-sm leading-6 text-slate-300">
-            We help businesses, professionals, startups, and individuals grow
-            through websites, branding, QA, hosting, and digital solutions.
+          <p className="mt-5 max-w-sm text-sm leading-7 text-slate-300">
+            Modern digital solutions for students, professionals, startups, and
+            businesses.
           </p>
 
           <div className="mt-6 flex gap-3">
@@ -73,17 +69,17 @@ function Footer() {
                 href={href}
                 target="_blank"
                 rel="noreferrer"
-                className="rounded-full bg-white/10 p-2 transition hover:bg-blue-600"
                 aria-label={label}
+                className="focus-visible-ring rounded-full bg-white/10 p-2.5 text-white transition hover:bg-blue-600"
               >
-                <Icon size={18} />
+                <Icon size={17} />
               </a>
             ))}
           </div>
         </div>
 
         <div>
-          <h3 className="font-semibold">Quick Links</h3>
+          <h3 className="font-heading font-bold">Quick Links</h3>
 
           <ul className="mt-5 space-y-3 text-sm text-slate-300">
             {quickLinks.map((link) => (
@@ -100,7 +96,7 @@ function Footer() {
         </div>
 
         <div>
-          <h3 className="font-semibold">Services</h3>
+          <h3 className="font-heading font-bold">Services</h3>
 
           <ul className="mt-5 space-y-3 text-sm text-slate-300">
             {services.map((service) => (
@@ -110,11 +106,21 @@ function Footer() {
         </div>
 
         <div>
-          <h3 className="font-semibold">Contact Us</h3>
+          <h3 className="font-heading font-bold">Resources</h3>
+
+          <ul className="mt-5 space-y-3 text-sm text-slate-300">
+            {resources.map((resource) => (
+              <li key={resource}>{resource}</li>
+            ))}
+          </ul>
+        </div>
+
+        <div>
+          <h3 className="font-heading font-bold">Contact</h3>
 
           <div className="mt-5 space-y-4 text-sm text-slate-300">
             <p className="flex items-start gap-3">
-              <MapPin className="mt-0.5 shrink-0" size={18} />
+              <MapPin size={18} className="mt-0.5 shrink-0 text-blue-300" />
               Islamabad, Pakistan
             </p>
 
@@ -122,24 +128,26 @@ function Footer() {
               href="tel:+923288651551"
               className="flex items-center gap-3 transition hover:text-white"
             >
-              <Phone size={18} />
+              <Phone size={18} className="shrink-0 text-blue-300" />
               +92 328 8651551
             </a>
 
             <a
               href="mailto:hello.nexovora@gmail.com"
-              className="flex items-center gap-3 transition hover:text-white"
+              className="flex items-start gap-3 break-all transition hover:text-white"
             >
-              <Mail size={18} />
+              <Mail size={18} className="mt-0.5 shrink-0 text-blue-300" />
               hello.nexovora@gmail.com
             </a>
           </div>
         </div>
       </div>
 
-      <div className="mx-auto mt-12 flex max-w-7xl flex-col gap-3 border-t border-white/10 pt-6 text-sm text-slate-400 md:flex-row md:justify-between">
-        <p>© 2026 Nexovora. All Rights Reserved.</p>
-        <p>Made with care by Nexovora</p>
+      <div className="border-t border-white/10">
+        <div className="section-container flex flex-col gap-3 py-6 text-sm text-slate-400 md:flex-row md:justify-between">
+          <p>© 2026 Nexovora. All Rights Reserved.</p>
+          <p>Made with care by Nexovora</p>
+        </div>
       </div>
     </footer>
   );
