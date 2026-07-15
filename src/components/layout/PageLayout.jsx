@@ -3,11 +3,11 @@ import Footer from "./Footer";
 
 function PageLayout({ children }) {
   return (
-    <>
+    <div className="min-h-screen bg-white">
       <Navbar />
       {children}
       <Footer />
-    </>
+    </div>
   );
 }
 

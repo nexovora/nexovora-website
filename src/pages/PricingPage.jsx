@@ -3,10 +3,14 @@ import PageLayout from "../components/layout/PageLayout";
 function PricingPage() {
   return (
     <PageLayout>
-      <main className="min-h-screen px-6 py-24">
+      <main className="min-h-[70vh] px-5 py-24 lg:px-8">
         <div className="mx-auto max-w-7xl">
-          <h1 className="font-['Space_Grotesk'] text-4xl font-bold">
-            Nexovora Pricing
+          <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
+            Digital Solutions Agency
+          </p>
+
+          <h1 className="mt-4 max-w-3xl font-['Space_Grotesk'] text-5xl font-bold leading-tight text-slate-950">
+            Pricing
           </h1>
         </div>
       </main>
