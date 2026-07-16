@@ -1,18 +1,38 @@
+import { useEffect } from "react";
 import PageLayout from "../components/layout/PageLayout";
+import PartnerServices from "../components/services/PartnerServices";
+import ServicesCTA from "../components/services/ServicesCTA";
+import ServicesGrid from "../components/services/ServicesGrid";
+import ServicesHero from "../components/services/ServicesHero";
+import ServicesProcess from "../components/services/ServicesProcess";
+import WhyChooseUs from "../components/services/WhyChooseUs";
 
 function ServicesPage() {
+  useEffect(() => {
+    const previousTitle = document.title;
+
+    document.title =
+      "Digital Services | Website, Design & QA — Nexovora";
+
+    return () => {
+      document.title = previousTitle;
+    };
+  }, []);
+
   return (
     <PageLayout>
-      <main className="min-h-[70vh] px-5 py-24 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
-            Digital Solutions Agency
-          </p>
+      <main>
+        <ServicesHero />
 
-          <h1 className="mt-4 max-w-3xl font-['Space_Grotesk'] text-5xl font-bold leading-tight text-slate-950">
-            Building Digital Experiences That Drive Results.
-          </h1>
-        </div>
+        <ServicesGrid />
+
+        <PartnerServices />
+
+        <ServicesProcess />
+
+        <WhyChooseUs />
+
+        <ServicesCTA />
       </main>
     </PageLayout>
   );

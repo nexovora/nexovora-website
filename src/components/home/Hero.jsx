@@ -25,22 +25,31 @@ function DashboardMockup() {
         repeat: Infinity,
         ease: "easeInOut",
       }}
-      className="relative mx-auto flex w-full items-center justify-center overflow-hidden"
+      className="relative mx-auto flex w-full items-center justify-center"
     >
-      {/* Blue glow behind laptop */}
       <div
-        className="pointer-events-none absolute inset-x-[10%] bottom-[8%] h-[42%] rounded-full bg-blue-400/20 blur-3xl"
+        className="pointer-events-none absolute inset-x-[10%] bottom-[6%] h-[48%] rounded-full bg-blue-300/25 blur-3xl"
         aria-hidden="true"
       />
 
-      <img
-        src={heroLaptop}
-        alt="Modern laptop displaying a digital project-management dashboard"
-        className="relative z-10 w-full max-w-[760px] -translate-y-2 scale-[1.06] select-none object-contain drop-shadow-[0_30px_50px_rgba(37,99,235,0.18)] sm:scale-[1.04] lg:-translate-y-3 lg:scale-[1.1]"
-        draggable="false"
-        loading="eager"
-        fetchPriority="high"
-      />
+      <div
+        className="relative w-full max-w-[760px]"
+        style={{
+          WebkitMaskImage:
+            "radial-gradient(ellipse at center, black 74%, transparent 100%)",
+          maskImage:
+            "radial-gradient(ellipse at center, black 74%, transparent 100%)",
+        }}
+      >
+        <img
+          src={heroLaptop}
+          alt="Modern laptop displaying a Nexovora digital dashboard"
+          className="w-full select-none object-contain"
+          draggable="false"
+          loading="eager"
+          fetchPriority="high"
+        />
+      </div>
     </motion.div>
   );
 }
@@ -164,7 +173,7 @@ function Hero() {
             delay: 0.1,
             ease: "easeOut",
           }}
-          className="relative z-10 -mx-4 sm:mx-0 lg:-mr-12"
+          className="relative z-10 min-w-0 lg:-mr-2"
         >
           <DashboardMockup />
         </motion.div>
