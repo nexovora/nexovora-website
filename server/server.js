@@ -5,6 +5,9 @@ const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
 const contactRoutes = require("./routes/contactRoutes");
+const quoteRoutes = require("./routes/quoteRoutes");
+const newsletterRoutes = require("./routes/newsletterRoutes");
+
 const { verifyEmailConnection } = require("./utils/mailer");
 
 dotenv.config();
@@ -24,6 +27,7 @@ app.use(
     allowedHeaders: ["Content-Type"],
   }),
 );
+
 
 app.use(express.json({ limit: "100kb" }));
 
@@ -48,6 +52,8 @@ app.get("/api/health", (request, response) => {
 });
 
 app.use("/api/contact", contactRoutes);
+app.use("/api/quote", quoteRoutes);
+app.use("/api/newsletter", newsletterRoutes);
 
 app.use("/api", (request, response) => {
   response.status(404).json({

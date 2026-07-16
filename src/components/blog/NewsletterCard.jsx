@@ -10,13 +10,15 @@ function NewsletterCard() {
   async function handleSubmit(event) {
     event.preventDefault();
 
-    if (!email.trim()) {
+    const cleanEmail = email.trim();
+
+    if (!cleanEmail) {
       setStatus("error");
       setMessage("Please enter your email address.");
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)) {
       setStatus("error");
       setMessage("Please enter a valid email address.");
       return;
@@ -26,19 +28,16 @@ function NewsletterCard() {
     setMessage("");
 
     try {
-      const result = await subscribeToNewsletter(email);
+      const result = await subscribeToNewsletter(cleanEmail);
 
       setStatus("success");
 
       setMessage(
-        result.mode === "development"
-          ? "Email validated in development mode. Connect a newsletter endpoint before publishing."
-          : "Thank you for subscribing.",
+        result.message ||
+          "Thank you for subscribing to Nexovora updates.",
       );
 
-      if (result.mode === "remote") {
-        setEmail("");
-      }
+      setEmail("");
     } catch (error) {
       setStatus("error");
 
@@ -53,7 +52,7 @@ function NewsletterCard() {
   return (
     <div className="rounded-2xl bg-gradient-to-br from-[#06142E] to-[#0B2A63] p-6 text-white shadow-xl">
       <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10 text-blue-200">
-        <Send size={20} />
+        <Send size={20} aria-hidden="true" />
       </div>
 
       <h2 className="font-heading mt-5 text-xl font-bold">
@@ -80,8 +79,14 @@ function NewsletterCard() {
             setMessage("");
           }}
           placeholder="Email address"
-          className={`focus-visible-ring w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-950 outline-none ${
-            status === "error" ? "border-red-400" : "border-white/20"
+          aria-invalid={status === "error"}
+          aria-describedby={
+            message ? "newsletter-status-message" : undefined
+          }
+          className={`focus-visible-ring w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-950 outline-none transition ${
+            status === "error"
+              ? "border-red-400 focus:border-red-500"
+              : "border-white/20 focus:border-blue-300"
           }`}
         />
 
@@ -92,16 +97,18 @@ function NewsletterCard() {
         >
           {status === "loading" ? "Subscribing..." : "Subscribe Now"}
 
-          <Send size={16} />
+          <Send size={16} aria-hidden="true" />
         </button>
 
         {message && (
           <p
+            id="newsletter-status-message"
             role="status"
-            className={`mt-3 rounded-lg px-3 py-2 text-xs leading-5 ${
+            aria-live="polite"
+            className={`mt-3 rounded-lg border px-3 py-2 text-xs leading-5 ${
               status === "success"
-                ? "bg-emerald-500/15 text-emerald-200"
-                : "bg-red-500/15 text-red-200"
+                ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-200"
+                : "border-red-400/30 bg-red-500/15 text-red-200"
             }`}
           >
             {message}
@@ -110,7 +117,7 @@ function NewsletterCard() {
       </form>
 
       <p className="mt-4 flex items-center gap-2 text-xs text-slate-400">
-        <LockKeyhole size={13} />
+        <LockKeyhole size={13} aria-hidden="true" />
         No spam. Unsubscribe anytime.
       </p>
     </div>

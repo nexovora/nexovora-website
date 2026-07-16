@@ -5,6 +5,7 @@ import {
   quoteBudgetOptions,
   quoteServiceOptions,
 } from "../../data/pricingPageData";
+import { submitQuoteRequest } from "../../services/quoteService";
 
 const initialForm = {
   fullName: "",
@@ -20,7 +21,8 @@ const initialForm = {
 function QuoteRequestForm() {
   const [form, setForm] = useState(initialForm);
   const [errors, setErrors] = useState({});
-  const [success, setSuccess] = useState(false);
+  const [status, setStatus] = useState("idle");
+  const [serverMessage, setServerMessage] = useState("");
   const reduceMotion = useReducedMotion();
 
   function updateField(event) {
@@ -34,9 +36,11 @@ function QuoteRequestForm() {
     setErrors((previous) => ({
       ...previous,
       [name]: "",
+      form: "",
     }));
 
-    setSuccess(false);
+    setStatus("idle");
+    setServerMessage("");
   }
 
   function validate() {
@@ -54,6 +58,11 @@ function QuoteRequestForm() {
 
     if (!form.whatsapp.trim()) {
       nextErrors.whatsapp = "Please enter your WhatsApp number.";
+    } else if (
+      !/^[+]?[\d\s()-]{7,20}$/.test(form.whatsapp.trim())
+    ) {
+      nextErrors.whatsapp =
+        "Please enter a valid WhatsApp number.";
     }
 
     if (!form.service) {
@@ -66,12 +75,15 @@ function QuoteRequestForm() {
 
     if (!form.details.trim()) {
       nextErrors.details = "Please describe your project.";
+    } else if (form.details.trim().length < 20) {
+      nextErrors.details =
+        "Please provide at least 20 characters about your project.";
     }
 
     return nextErrors;
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault();
 
     if (form.website) {
@@ -82,16 +94,45 @@ function QuoteRequestForm() {
 
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
-      setSuccess(false);
+      setStatus("error");
+      setServerMessage("Please review the highlighted fields.");
       return;
     }
 
-    setSuccess(true);
+    setStatus("loading");
+    setServerMessage("");
     setErrors({});
+
+    try {
+      const response = await submitQuoteRequest(form);
+
+      setStatus("success");
+      setServerMessage(
+        response.message ||
+          "Your quotation request has been sent successfully. We will contact you shortly.",
+      );
+
+      setForm(initialForm);
+    } catch (error) {
+      setStatus("error");
+      setServerMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to submit your quotation request.",
+      );
+    }
   }
 
-  const inputClass =
-    "focus-visible-ring w-full rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-400";
+  const inputBase =
+    "focus-visible-ring w-full rounded-xl border bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400";
+
+  function inputClass(fieldName) {
+    return `${inputBase} ${
+      errors[fieldName]
+        ? "border-red-400 focus:border-red-500"
+        : "border-slate-200 focus:border-blue-400"
+    }`;
+  }
 
   return (
     <section className="section-padding bg-white">
@@ -119,12 +160,12 @@ function QuoteRequestForm() {
 
             <div className="mt-7 rounded-2xl border border-blue-100 bg-white p-5">
               <p className="font-semibold text-slate-900">
-                This form currently performs local validation only.
+                Clear and transparent quotation
               </p>
 
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                It does not send data to a fake endpoint. Email or WhatsApp
-                integration can be connected later.
+                We review your project requirements before confirming the final
+                price, scope, timeline, and included revisions.
               </p>
             </div>
           </div>
@@ -134,6 +175,7 @@ function QuoteRequestForm() {
               <Field
                 label="Full Name"
                 name="fullName"
+                required
                 error={errors.fullName}
               >
                 <input
@@ -141,19 +183,32 @@ function QuoteRequestForm() {
                   name="fullName"
                   value={form.fullName}
                   onChange={updateField}
-                  className={inputClass}
+                  className={inputClass("fullName")}
+                  aria-invalid={Boolean(errors.fullName)}
+                  aria-describedby={
+                    errors.fullName ? "fullName-error" : undefined
+                  }
                   placeholder="Your full name"
                 />
               </Field>
 
-              <Field label="Email" name="email" error={errors.email}>
+              <Field
+                label="Email"
+                name="email"
+                required
+                error={errors.email}
+              >
                 <input
                   id="email"
                   name="email"
                   type="email"
                   value={form.email}
                   onChange={updateField}
-                  className={inputClass}
+                  className={inputClass("email")}
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={
+                    errors.email ? "email-error" : undefined
+                  }
                   placeholder="you@example.com"
                 />
               </Field>
@@ -161,6 +216,7 @@ function QuoteRequestForm() {
               <Field
                 label="WhatsApp Number"
                 name="whatsapp"
+                required
                 error={errors.whatsapp}
               >
                 <input
@@ -168,7 +224,11 @@ function QuoteRequestForm() {
                   name="whatsapp"
                   value={form.whatsapp}
                   onChange={updateField}
-                  className={inputClass}
+                  className={inputClass("whatsapp")}
+                  aria-invalid={Boolean(errors.whatsapp)}
+                  aria-describedby={
+                    errors.whatsapp ? "whatsapp-error" : undefined
+                  }
                   placeholder="+92 3XX XXXXXXX"
                 />
               </Field>
@@ -176,6 +236,7 @@ function QuoteRequestForm() {
               <Field
                 label="Service Required"
                 name="service"
+                required
                 error={errors.service}
               >
                 <select
@@ -183,7 +244,11 @@ function QuoteRequestForm() {
                   name="service"
                   value={form.service}
                   onChange={updateField}
-                  className={inputClass}
+                  className={inputClass("service")}
+                  aria-invalid={Boolean(errors.service)}
+                  aria-describedby={
+                    errors.service ? "service-error" : undefined
+                  }
                 >
                   <option value="">Select a service</option>
 
@@ -198,6 +263,7 @@ function QuoteRequestForm() {
               <Field
                 label="Budget Range"
                 name="budget"
+                required
                 error={errors.budget}
               >
                 <select
@@ -205,7 +271,11 @@ function QuoteRequestForm() {
                   name="budget"
                   value={form.budget}
                   onChange={updateField}
-                  className={inputClass}
+                  className={inputClass("budget")}
+                  aria-invalid={Boolean(errors.budget)}
+                  aria-describedby={
+                    errors.budget ? "budget-error" : undefined
+                  }
                 >
                   <option value="">Select your budget</option>
 
@@ -224,7 +294,7 @@ function QuoteRequestForm() {
                   type="date"
                   value={form.deadline}
                   onChange={updateField}
-                  className={inputClass}
+                  className={inputClass("deadline")}
                 />
               </Field>
             </div>
@@ -233,6 +303,7 @@ function QuoteRequestForm() {
               <Field
                 label="Project Details"
                 name="details"
+                required
                 error={errors.details}
               >
                 <textarea
@@ -241,8 +312,12 @@ function QuoteRequestForm() {
                   value={form.details}
                   onChange={updateField}
                   rows={6}
-                  className={`${inputClass} resize-y`}
-                  placeholder="Describe your project, goals, and required features..."
+                  className={`${inputClass("details")} resize-y`}
+                  aria-invalid={Boolean(errors.details)}
+                  aria-describedby={
+                    errors.details ? "details-error" : undefined
+                  }
+                  placeholder="Describe your project, goals, required features, references, and any special requirements..."
                 />
               </Field>
             </div>
@@ -260,22 +335,29 @@ function QuoteRequestForm() {
               />
             </div>
 
-            {success && (
+            {serverMessage && (
               <p
                 role="status"
-                className="mt-5 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700"
+                className={`mt-5 rounded-xl border px-4 py-3 text-sm leading-6 ${
+                  status === "success"
+                    ? "border-emerald-200 bg-emerald-50 text-emerald-700"
+                    : "border-red-200 bg-red-50 text-red-700"
+                }`}
               >
-                Your information is valid. Connect this form to email or
-                WhatsApp before publishing to receive submissions.
+                {serverMessage}
               </p>
             )}
 
             <button
               type="submit"
-              className="focus-visible-ring mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700"
+              disabled={status === "loading"}
+              className="focus-visible-ring mt-6 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:-translate-y-0.5 hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              Request Quote
-              <Send size={17} />
+              {status === "loading"
+                ? "Sending Request..."
+                : "Request Quote"}
+
+              <Send size={17} aria-hidden="true" />
             </button>
           </form>
         </div>
@@ -284,7 +366,13 @@ function QuoteRequestForm() {
   );
 }
 
-function Field({ label, name, error, children }) {
+function Field({
+  label,
+  name,
+  required = false,
+  error,
+  children,
+}) {
   return (
     <div>
       <label
@@ -292,12 +380,22 @@ function Field({ label, name, error, children }) {
         className="mb-2 block text-sm font-semibold text-slate-800"
       >
         {label}
+
+        {required && (
+          <span className="ml-1 text-red-500" aria-hidden="true">
+            *
+          </span>
+        )}
       </label>
 
       {children}
 
       {error && (
-        <p className="mt-2 text-xs text-red-600" role="alert">
+        <p
+          id={`${name}-error`}
+          className="mt-2 text-xs text-red-600"
+          role="alert"
+        >
           {error}
         </p>
       )}

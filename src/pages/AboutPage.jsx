@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import SEO from "../components/common/SEO";
+
 import AboutCTA from "../components/about/AboutCTA";
 import AboutFeatures from "../components/about/AboutFeatures";
 import AboutHero from "../components/about/AboutHero";
@@ -8,27 +9,25 @@ import PurposeSection from "../components/about/PurposeSection";
 import PageLayout from "../components/layout/PageLayout";
 
 function AboutPage() {
-  useEffect(() => {
-    const previousTitle = document.title;
-
-    document.title = "About Nexovora | Creating Digital Excellence";
-
-    return () => {
-      document.title = previousTitle;
-    };
-  }, []);
-
   return (
-    <PageLayout>
-      <main>
-        <AboutHero />
-        <PurposeSection />
-        <JourneyTimeline />
-        <AboutFeatures />
-        <FounderSection />
-        <AboutCTA />
-      </main>
-    </PageLayout>
+    <>
+      <SEO
+        title="About Nexovora | Creating Digital Excellence"
+        description="Learn about Nexovora's mission, vision, values, and commitment to delivering high-quality digital solutions."
+        url="/about"
+      />
+
+      <PageLayout>
+        <main>
+          <AboutHero />
+          <PurposeSection />
+          <JourneyTimeline />
+          <AboutFeatures />
+          <FounderSection />
+          <AboutCTA />
+        </main>
+      </PageLayout>
+    </>
   );
 }
 

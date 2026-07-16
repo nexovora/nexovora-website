@@ -1,9 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import BlogCard from "../components/blog/BlogCard";
 import BlogCategoryFilter from "../components/blog/BlogCategoryFilter";
 import BlogHero from "../components/blog/BlogHero";
 import BlogNewsletterCTA from "../components/blog/BlogNewsletterCTA";
 import BlogSidebar from "../components/blog/BlogSidebar";
+import SEO from "../components/common/SEO";
 import EmptyState from "../components/blog/EmptyState";
 import PageLayout from "../components/layout/PageLayout";
 import { blogPosts } from "../data/blogPosts";
@@ -12,32 +13,6 @@ function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("All Posts");
   const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
-
-  useEffect(() => {
-    const previousTitle = document.title;
-
-    document.title =
-      "Nexovora Blog | Web, Design, QA & Digital Insights";
-
-    const description = document.querySelector(
-      'meta[name="description"]',
-    );
-
-    const previousDescription = description?.getAttribute("content");
-
-    description?.setAttribute(
-      "content",
-      "Explore practical articles from Nexovora on website development, UI/UX design, QA testing, branding, hosting, business growth, and digital solutions.",
-    );
-
-    return () => {
-      document.title = previousTitle;
-
-      if (description && previousDescription) {
-        description.setAttribute("content", previousDescription);
-      }
-    };
-  }, []);
 
   const filteredPosts = useMemo(() => {
     const normalizedSearch = searchQuery.trim().toLowerCase();
@@ -75,76 +50,81 @@ function BlogPage() {
   }
 
   return (
-    <PageLayout>
-      <main>
-        <BlogHero
-          searchValue={searchInput}
-          onSearchChange={(event) =>
-            setSearchInput(event.target.value)
-          }
-          onSearchSubmit={handleSearchSubmit}
-        />
+    <>
+      <SEO
+        title="Nexovora Blog | Web, Design, QA & Digital Insights"
+        description="Read practical articles about website development, branding, UI/UX, QA testing, SEO, and digital growth."
+        url="/blog"
+      />
 
-        <BlogCategoryFilter
-          activeCategory={activeCategory}
-          onCategoryChange={handleCategoryChange}
-        />
+      <PageLayout>
+        <main>
+          <BlogHero
+            searchValue={searchInput}
+            onSearchChange={(event) =>
+              setSearchInput(event.target.value)
+            }
+            onSearchSubmit={handleSearchSubmit}
+          />
 
-        <section className="section-padding bg-slate-50/60">
-          <div className="section-container">
-            <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(290px,0.8fr)]">
-              {/* Main article area */}
-              <div className="min-w-0">
-                <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
-                      Latest Insights
+          <BlogCategoryFilter
+            activeCategory={activeCategory}
+            onCategoryChange={handleCategoryChange}
+          />
+
+          <section className="section-padding bg-slate-50/60">
+            <div className="section-container">
+              <div className="grid items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(290px,0.8fr)]">
+                <div className="min-w-0">
+                  <div className="mb-7 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
+                        Latest Insights
+                      </p>
+
+                      <h2 className="font-heading mt-2 text-3xl font-bold text-slate-950">
+                        Explore Our Articles
+                      </h2>
+                    </div>
+
+                    <p className="text-sm text-slate-500">
+                      {filteredPosts.length}{" "}
+                      {filteredPosts.length === 1
+                        ? "article"
+                        : "articles"}
                     </p>
-
-                    <h2 className="font-heading mt-2 text-3xl font-bold text-slate-950">
-                      Explore Our Articles
-                    </h2>
                   </div>
 
-                  <p className="text-sm text-slate-500">
-                    {filteredPosts.length}{" "}
-                    {filteredPosts.length === 1
-                      ? "article"
-                      : "articles"}
-                  </p>
+                  <div className="grid gap-6 md:grid-cols-2">
+                    {filteredPosts.length > 0 ? (
+                      filteredPosts.map((post, index) => (
+                        <BlogCard
+                          key={post.id}
+                          post={post}
+                          index={index}
+                        />
+                      ))
+                    ) : (
+                      <EmptyState onReset={resetFilters} />
+                    )}
+                  </div>
                 </div>
 
-                <div className="grid gap-6 md:grid-cols-2">
-                  {filteredPosts.length > 0 ? (
-                    filteredPosts.map((post, index) => (
-                      <BlogCard
-                        key={post.id}
-                        post={post}
-                        index={index}
-                      />
-                    ))
-                  ) : (
-                    <EmptyState onReset={resetFilters} />
-                  )}
+                <div className="min-w-0 lg:sticky lg:top-28">
+                  <BlogSidebar
+                    featuredPosts={featuredPosts}
+                    activeCategory={activeCategory}
+                    onCategoryChange={handleCategoryChange}
+                  />
                 </div>
-              </div>
-
-              {/* Sidebar */}
-              <div className="min-w-0 lg:sticky lg:top-28">
-                <BlogSidebar
-                  featuredPosts={featuredPosts}
-                  activeCategory={activeCategory}
-                  onCategoryChange={handleCategoryChange}
-                />
               </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        {/* Full-width CTA must remain outside the article/sidebar grid */}
-        <BlogNewsletterCTA />
-      </main>
-    </PageLayout>
+          <BlogNewsletterCTA />
+        </main>
+      </PageLayout>
+    </>
   );
 }
 

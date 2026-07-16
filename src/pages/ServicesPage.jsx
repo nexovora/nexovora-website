@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import SEO from "../components/common/SEO";
+
 import PageLayout from "../components/layout/PageLayout";
 import PartnerServices from "../components/services/PartnerServices";
 import ServicesCTA from "../components/services/ServicesCTA";
@@ -8,33 +9,30 @@ import ServicesProcess from "../components/services/ServicesProcess";
 import WhyChooseUs from "../components/services/WhyChooseUs";
 
 function ServicesPage() {
-  useEffect(() => {
-    const previousTitle = document.title;
-
-    document.title =
-      "Digital Services | Website, Design & QA — Nexovora";
-
-    return () => {
-      document.title = previousTitle;
-    };
-  }, []);
-
   return (
-    <PageLayout>
-      <main>
-        <ServicesHero />
+    <>
+      <SEO
+        title="Digital Services | Website, Design & QA — Nexovora"
+        description="Professional Website Development, Graphic Design, QA Testing, Branding, Domain & Hosting, Resume Design, Portfolio Development, and complete digital solutions tailored to your business."
+        url="/services"
+      />
 
-        <ServicesGrid />
+      <PageLayout>
+        <main>
+          <ServicesHero />
 
-        <PartnerServices />
+          <ServicesGrid />
 
-        <ServicesProcess />
+          <PartnerServices />
 
-        <WhyChooseUs />
+          <ServicesProcess />
 
-        <ServicesCTA />
-      </main>
-    </PageLayout>
+          <WhyChooseUs />
+
+          <ServicesCTA />
+        </main>
+      </PageLayout>
+    </>
   );
 }
 

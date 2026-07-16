@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import SEO from "../components/common/SEO";
 import PageLayout from "../components/layout/PageLayout";
 import AddOns from "../components/pricing/AddOns";
 import ComparisonTable from "../components/pricing/ComparisonTable";
@@ -10,42 +10,27 @@ import PricingPlans from "../components/pricing/PricingPlans";
 import QuoteRequestForm from "../components/pricing/QuoteRequestForm";
 
 function PricingPage() {
-  useEffect(() => {
-    const previousTitle = document.title;
-
-    document.title =
-      "Pricing & Packages | Website, Portfolio, Branding & QA — Nexovora";
-
-    const description = document.querySelector('meta[name="description"]');
-    const previousDescription = description?.getAttribute("content");
-
-    description?.setAttribute(
-      "content",
-      "Explore transparent one-time pricing for Nexovora website development, portfolio design, branding, QA testing, and custom digital solutions.",
-    );
-
-    return () => {
-      document.title = previousTitle;
-
-      if (description && previousDescription) {
-        description.setAttribute("content", previousDescription);
-      }
-    };
-  }, []);
-
   return (
-    <PageLayout>
-      <main>
-        <PricingHero />
-        <PricingPlans />
-        <IncludedFeatures />
-        <AddOns />
-        <ComparisonTable />
-        <FAQAccordion />
-        <QuoteRequestForm />
-        <PricingCTA />
-      </main>
-    </PageLayout>
+    <>
+      <SEO
+        title="Pricing & Packages | Website, Portfolio, Branding & QA — Nexovora"
+        description="Explore transparent one-time pricing for Nexovora website development, portfolio design, branding, QA testing, and custom digital solutions."
+        url="/pricing"
+      />
+
+      <PageLayout>
+        <main>
+          <PricingHero />
+          <PricingPlans />
+          <IncludedFeatures />
+          <AddOns />
+          <ComparisonTable />
+          <FAQAccordion />
+          <QuoteRequestForm />
+          <PricingCTA />
+        </main>
+      </PageLayout>
+    </>
   );
 }
 

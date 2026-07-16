@@ -1,17 +1,14 @@
-const NEWSLETTER_API_URL =
-  import.meta.env.VITE_NEWSLETTER_API_URL ||
-  "http://localhost:5000/api/newsletter";
+const QUOTE_API_URL =
+  import.meta.env.VITE_QUOTE_API_URL ||
+  "http://localhost:5000/api/quote";
 
-export async function subscribeToNewsletter(email) {
-  const response = await fetch(NEWSLETTER_API_URL, {
+export async function submitQuoteRequest(formData) {
+  const response = await fetch(QUOTE_API_URL, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({
-      email,
-      website: "",
-    }),
+    body: JSON.stringify(formData),
   });
 
   let responseData;
@@ -27,7 +24,7 @@ export async function subscribeToNewsletter(email) {
   if (!response.ok) {
     throw new Error(
       responseData.message ||
-        "Unable to subscribe at the moment.",
+        "Unable to submit the quotation request.",
     );
   }
 
