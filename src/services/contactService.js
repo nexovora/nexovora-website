@@ -1,37 +1,32 @@
+const CONTACT_API_URL =
+  import.meta.env.VITE_CONTACT_API_URL ||
+  "http://localhost:5000/api/contact";
+
 export async function submitContactForm(formData) {
-  const endpoint = import.meta.env.VITE_CONTACT_FORM_ENDPOINT;
+  const response = await fetch(CONTACT_API_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(formData),
+  });
 
-  if (endpoint) {
-    const response = await fetch(endpoint, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
+  let responseData;
 
-    if (!response.ok) {
-      throw new Error("Unable to submit your message.");
-    }
-
-    return {
-      success: true,
-      mode: "remote",
-    };
+  try {
+    responseData = await response.json();
+  } catch {
+    throw new Error(
+      "The server returned an unexpected response. Please try again.",
+    );
   }
 
-  if (import.meta.env.DEV) {
-    await new Promise((resolve) => {
-      window.setTimeout(resolve, 900);
-    });
-
-    return {
-      success: true,
-      mode: "development",
-    };
+  if (!response.ok) {
+    throw new Error(
+      responseData.message ||
+        "Unable to send your message. Please try again.",
+    );
   }
 
-  throw new Error(
-    "The contact form is not connected yet. Please contact Nexovora through WhatsApp or email.",
-  );
+  return responseData;
 }
