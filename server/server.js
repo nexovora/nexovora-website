@@ -4,13 +4,13 @@ const express = require("express");
 const helmet = require("helmet");
 const rateLimit = require("express-rate-limit");
 
+dotenv.config();
+
 const contactRoutes = require("./routes/contactRoutes");
 const quoteRoutes = require("./routes/quoteRoutes");
 const newsletterRoutes = require("./routes/newsletterRoutes");
 
 const { verifyEmailConnection } = require("./utils/mailer");
-
-dotenv.config();
 
 const app = express();
 
@@ -27,7 +27,6 @@ app.use(
     allowedHeaders: ["Content-Type"],
   }),
 );
-
 
 app.use(express.json({ limit: "100kb" }));
 
@@ -71,14 +70,17 @@ app.use((error, request, response, next) => {
   });
 });
 
-app.listen(PORT, async () => {
-  console.log(`Nexovora backend running at http://localhost:${PORT}`);
+app.listen(PORT, "0.0.0.0", async () => {
+  console.log(`Nexovora backend running on port ${PORT}`);
   console.log(`Allowed frontend: ${CLIENT_URL}`);
 
   try {
     await verifyEmailConnection();
     console.log("Email service connected successfully.");
   } catch (error) {
-    console.error("Email service connection failed:", error.message);
+    console.error(
+      "Email service connection failed:",
+      error.message,
+    );
   }
 });
