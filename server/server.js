@@ -14,6 +14,12 @@ const { verifyEmailConnection } = require("./utils/mailer");
 
 const app = express();
 
+/*
+ * Railway runs the application behind a reverse proxy.
+ * This allows express-rate-limit to correctly read the client IP.
+ */
+app.set("trust proxy", 1);
+
 const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = (
@@ -30,17 +36,13 @@ app.use(helmet());
 app.use(
   cors({
     origin(origin, callback) {
-      // Allow requests without an Origin header, such as Postman.
       if (!origin || allowedOrigins.includes(origin)) {
         callback(null, true);
         return;
       }
 
       console.error(`Blocked by CORS: ${origin}`);
-
-      callback(
-        new Error("This origin is not allowed by CORS."),
-      );
+      callback(new Error("This origin is not allowed by CORS."));
     },
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
@@ -97,6 +99,12 @@ app.use((error, request, response, next) => {
   });
 });
 
+console.log("Email environment status:", {
+  EMAIL_USER: Boolean(process.env.EMAIL_USER),
+  EMAIL_APP_PASSWORD: Boolean(process.env.EMAIL_APP_PASSWORD),
+  EMAIL_RECEIVER: Boolean(process.env.EMAIL_RECEIVER),
+});
+
 app.listen(PORT, "0.0.0.0", async () => {
   console.log(`Nexovora backend running on port ${PORT}`);
 
@@ -106,7 +114,6 @@ app.listen(PORT, "0.0.0.0", async () => {
 
   try {
     await verifyEmailConnection();
-
     console.log("Email service connected successfully.");
   } catch (error) {
     console.error(
