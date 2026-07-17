@@ -15,15 +15,34 @@ const { verifyEmailConnection } = require("./utils/mailer");
 const app = express();
 
 const PORT = process.env.PORT || 5000;
-const CLIENT_URL =
-  process.env.CLIENT_URL || "http://localhost:5174";
+
+const allowedOrigins = (
+  process.env.CLIENT_URLS ||
+  process.env.CLIENT_URL ||
+  "http://localhost:5174"
+)
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 app.use(helmet());
 
 app.use(
   cors({
-    origin: CLIENT_URL,
-    methods: ["GET", "POST"],
+    origin(origin, callback) {
+      // Allow requests without an Origin header, such as Postman.
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      console.error(`Blocked by CORS: ${origin}`);
+
+      callback(
+        new Error("This origin is not allowed by CORS."),
+      );
+    },
+    methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   }),
 );
@@ -64,6 +83,14 @@ app.use("/api", (request, response) => {
 app.use((error, request, response, next) => {
   console.error("Server error:", error);
 
+  if (error.message === "This origin is not allowed by CORS.") {
+    response.status(403).json({
+      success: false,
+      message: "This website is not allowed to access the API.",
+    });
+    return;
+  }
+
   response.status(500).json({
     success: false,
     message: "An internal server error occurred.",
@@ -72,10 +99,14 @@ app.use((error, request, response, next) => {
 
 app.listen(PORT, "0.0.0.0", async () => {
   console.log(`Nexovora backend running on port ${PORT}`);
-  console.log(`Allowed frontend: ${CLIENT_URL}`);
+
+  console.log(
+    `Allowed frontends: ${allowedOrigins.join(", ")}`,
+  );
 
   try {
     await verifyEmailConnection();
+
     console.log("Email service connected successfully.");
   } catch (error) {
     console.error(
