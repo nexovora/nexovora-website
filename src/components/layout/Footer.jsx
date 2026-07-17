@@ -26,10 +26,10 @@ const services = [
 ];
 
 const resources = [
-  "Blog",
-  "FAQs",
-  "Privacy Policy",
-  "Terms & Conditions",
+  { label: "Blog", path: "/blog" },
+  { label: "FAQs", path: "/faqs" },
+  { label: "Privacy Policy", path: "/privacy-policy" },
+  { label: "Terms & Conditions", path: "/terms-and-conditions" },
 ];
 
 const socialLinks = [
@@ -86,7 +86,11 @@ function Footer() {
               <li key={link.path}>
                 <NavLink
                   to={link.path}
-                  className="transition hover:text-white"
+                  className={({ isActive }) =>
+                    `transition hover:text-white ${
+                      isActive ? "text-white" : ""
+                    }`
+                  }
                 >
                   {link.label}
                 </NavLink>
@@ -110,7 +114,18 @@ function Footer() {
 
           <ul className="mt-5 space-y-3 text-sm text-slate-300">
             {resources.map((resource) => (
-              <li key={resource}>{resource}</li>
+              <li key={resource.path}>
+                <NavLink
+                  to={resource.path}
+                  className={({ isActive }) =>
+                    `transition hover:text-white ${
+                      isActive ? "text-white" : ""
+                    }`
+                  }
+                >
+                  {resource.label}
+                </NavLink>
+              </li>
             ))}
           </ul>
         </div>
@@ -146,7 +161,22 @@ function Footer() {
       <div className="border-t border-white/10">
         <div className="section-container flex flex-col gap-3 py-6 text-sm text-slate-400 md:flex-row md:justify-between">
           <p>© 2026 Nexovora. All Rights Reserved.</p>
-          <p>Made with care by Nexovora</p>
+
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            <NavLink
+              to="/privacy-policy"
+              className="transition hover:text-white"
+            >
+              Privacy Policy
+            </NavLink>
+
+            <NavLink
+              to="/terms-and-conditions"
+              className="transition hover:text-white"
+            >
+              Terms & Conditions
+            </NavLink>
+          </div>
         </div>
       </div>
     </footer>
