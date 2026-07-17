@@ -4,32 +4,32 @@
 xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
 <url>
-<loc>https://nexovora.com/</loc>
+<loc>https://nexovorastudio.com/</loc>
 <priority>1.0</priority>
 </url>
 
 <url>
-<loc>https://nexovora.com/about</loc>
+<loc>https://nexovorastudio.com/about</loc>
 <priority>0.9</priority>
 </url>
 
 <url>
-<loc>https://nexovora.com/services</loc>
+<loc>https://nexovorastudio.com/services</loc>
 <priority>0.9</priority>
 </url>
 
 <url>
-<loc>https://nexovora.com/pricing</loc>
+<loc>https://nexovorastudio.com/pricing</loc>
 <priority>0.8</priority>
 </url>
 
 <url>
-<loc>https://nexovora.com/blog</loc>
+<loc>https://nexovorastudio.com/blog</loc>
 <priority>0.8</priority>
 </url>
 
 <url>
-<loc>https://nexovora.com/contact</loc>
+<loc>https://nexovorastudio.com/contact</loc>
 <priority>0.9</priority>
 </url>
 
