@@ -35,7 +35,7 @@ const resources = [
 const socialLinks = [
   {
     label: "Facebook",
-    href: "https://www.facebook.com/",
+    href: "https://www.facebook.com/profile.php?id=61592011827591",
     icon: FaFacebookF,
   },
   {
