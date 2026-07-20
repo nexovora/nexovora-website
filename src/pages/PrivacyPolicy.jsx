@@ -1,4 +1,5 @@
-import SEO from "../components/SEO";
+import SEO from "../components/common/SEO";
+import PageLayout from "../components/layout/PageLayout";
 
 function PrivacyPolicy() {
   return (
@@ -9,8 +10,9 @@ function PrivacyPolicy() {
         url="/privacy-policy"
       />
 
-      <main className="min-h-screen bg-slate-50 px-5 py-24">
-        <div className="mx-auto max-w-4xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-12">
+      <PageLayout>
+        <main className="min-h-screen bg-slate-50 px-5 py-24">
+          <div className="mx-auto max-w-4xl rounded-3xl border border-slate-200 bg-white p-6 shadow-sm md:p-12">
           <header className="border-b border-slate-200 pb-8">
             <p className="mb-3 text-sm font-semibold uppercase tracking-widest text-blue-600">
               Legal Information
@@ -277,8 +279,9 @@ function PrivacyPolicy() {
               </div>
             </section>
           </div>
-        </div>
-      </main>
+          </div>
+        </main>
+      </PageLayout>
     </>
   );
 }

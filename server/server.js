@@ -82,7 +82,7 @@ app.use("/api", (request, response) => {
   });
 });
 
-app.use((error, request, response, next) => {
+app.use((error, request, response, _next) => {
   console.error("Server error:", error);
 
   if (error.message === "This origin is not allowed by CORS.") {

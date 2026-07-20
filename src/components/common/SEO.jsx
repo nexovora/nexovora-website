@@ -20,6 +20,25 @@ function SEO({
 
   const fullUrl = `${siteUrl}${normalizedPath}`;
   const fullImageUrl = `${siteUrl}${normalizedImage}`;
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: siteName,
+    url: siteUrl || fullUrl,
+    logo: `${siteUrl}/favicon.png`,
+    sameAs: [
+      "https://www.instagram.com/nexovorastudio",
+      "https://www.facebook.com/",
+      "https://www.linkedin.com/",
+    ],
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+923288651551",
+      contactType: "customer support",
+      areaServed: "PK",
+      availableLanguage: ["en"],
+    },
+  };
 
   return (
     <Helmet>
@@ -45,6 +64,10 @@ function SEO({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={fullImageUrl} />
+
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
     </Helmet>
   );
 }
