@@ -2,6 +2,7 @@ import SEO from "../components/common/SEO";
 import ContactFAQ from "../components/contact/ContactFAQ";
 import FAQAccordion from "../components/pricing/FAQAccordion";
 import PageLayout from "../components/layout/PageLayout";
+import FadeIn from "../components/animations/FadeIn";
 
 function FaqPage() {
   return (
@@ -15,7 +16,7 @@ function FaqPage() {
       <PageLayout>
         <main>
           <section className="bg-gradient-to-b from-white to-blue-50/50 py-20">
-            <div className="section-container text-center">
+            <FadeIn className="section-container text-center">
               <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
                 Help Center
               </p>
@@ -28,7 +29,7 @@ function FaqPage() {
                 Quick answers about Nexovora services, quotations, timelines,
                 and communication.
               </p>
-            </div>
+            </FadeIn>
           </section>
 
           <ContactFAQ />

@@ -1,5 +1,6 @@
 import SEO from "../components/common/SEO";
 import PageLayout from "../components/layout/PageLayout";
+import FadeIn from "../components/animations/FadeIn";
 
 function NotFoundPage() {
   return (
@@ -12,7 +13,7 @@ function NotFoundPage() {
 
       <PageLayout>
         <main className="min-h-[70vh] px-5 py-24 lg:px-8">
-          <div className="mx-auto max-w-7xl">
+          <FadeIn className="mx-auto max-w-7xl">
             <p className="text-sm font-semibold uppercase tracking-wider text-blue-600">
               Digital Solutions Agency
             </p>
@@ -26,7 +27,7 @@ function NotFoundPage() {
               moved. You can return to the homepage and continue exploring our
               digital services.
             </p>
-          </div>
+          </FadeIn>
         </main>
       </PageLayout>
     </>

@@ -1,4 +1,5 @@
 import { Mail, MapPin, Phone } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import {
   FaFacebookF,
   FaInstagram,
@@ -6,6 +7,8 @@ import {
 } from "react-icons/fa6";
 import { NavLink } from "react-router-dom";
 import Logo from "../common/Logo";
+import StaggerContainer from "../animations/StaggerContainer";
+import { buttonHover, buttonTap, fadeInVariant } from "../../utils/motionVariants";
 
 const quickLinks = [
   { label: "Home", path: "/" },
@@ -51,10 +54,22 @@ const socialLinks = [
 ];
 
 function Footer() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <footer className="bg-[#06142E] text-white">
-      <div className="section-container grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5">
-        <div className="lg:col-span-1">
+      <StaggerContainer
+        as="div"
+        className="section-container grid gap-10 py-14 md:grid-cols-2 lg:grid-cols-5"
+      >
+        <motion.div
+          variants={
+            reduceMotion
+              ? undefined
+              : fadeInVariant({ direction: "up", distance: 16 })
+          }
+          className="lg:col-span-1"
+        >
           <Logo light />
 
           <p className="mt-5 max-w-sm text-sm leading-7 text-slate-300">
@@ -64,21 +79,29 @@ function Footer() {
 
           <div className="mt-6 flex gap-3">
             {socialLinks.map(({ label, href, icon: Icon }) => (
-              <a
+              <motion.a
                 key={label}
                 href={href}
                 target="_blank"
                 rel="noreferrer"
                 aria-label={label}
+                whileHover={reduceMotion ? undefined : buttonHover}
+                whileTap={reduceMotion ? undefined : buttonTap}
                 className="focus-visible-ring rounded-full bg-white/10 p-2.5 text-white transition hover:bg-blue-600"
               >
                 <Icon size={17} />
-              </a>
+              </motion.a>
             ))}
           </div>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          variants={
+            reduceMotion
+              ? undefined
+              : fadeInVariant({ direction: "up", distance: 16 })
+          }
+        >
           <h3 className="font-heading font-bold">Quick Links</h3>
 
           <ul className="mt-5 space-y-3 text-sm text-slate-300">
@@ -97,9 +120,15 @@ function Footer() {
               </li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          variants={
+            reduceMotion
+              ? undefined
+              : fadeInVariant({ direction: "up", distance: 16 })
+          }
+        >
           <h3 className="font-heading font-bold">Services</h3>
 
           <ul className="mt-5 space-y-3 text-sm text-slate-300">
@@ -107,9 +136,15 @@ function Footer() {
               <li key={service}>{service}</li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          variants={
+            reduceMotion
+              ? undefined
+              : fadeInVariant({ direction: "up", distance: 16 })
+          }
+        >
           <h3 className="font-heading font-bold">Resources</h3>
 
           <ul className="mt-5 space-y-3 text-sm text-slate-300">
@@ -128,9 +163,15 @@ function Footer() {
               </li>
             ))}
           </ul>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          variants={
+            reduceMotion
+              ? undefined
+              : fadeInVariant({ direction: "up", distance: 16 })
+          }
+        >
           <h3 className="font-heading font-bold">Contact</h3>
 
           <div className="mt-5 space-y-4 text-sm text-slate-300">
@@ -155,8 +196,8 @@ function Footer() {
               hello.nexovora@gmail.com
             </a>
           </div>
-        </div>
-      </div>
+        </motion.div>
+      </StaggerContainer>
 
       <div className="border-t border-white/10">
         <div className="section-container flex flex-col gap-3 py-6 text-sm text-slate-400 md:flex-row md:justify-between">

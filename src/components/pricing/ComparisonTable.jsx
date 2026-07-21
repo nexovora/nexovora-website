@@ -1,10 +1,11 @@
 import { comparisonRows } from "../../data/pricingPageData";
+import FadeIn from "../animations/FadeIn";
 
 function ComparisonTable() {
   return (
     <section className="section-padding bg-white">
       <div className="section-container">
-        <div className="mx-auto max-w-2xl text-center">
+        <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
             Compare Packages
           </p>
@@ -17,9 +18,9 @@ function ComparisonTable() {
             A quick overview of common inclusions. Final scope is confirmed in
             your quotation.
           </p>
-        </div>
+        </FadeIn>
 
-        <div className="mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-[0_14px_38px_rgba(15,23,42,0.05)]">
+        <FadeIn className="mt-10 overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-[0_14px_38px_rgba(15,23,42,0.05)]">
           <table className="min-w-[760px] w-full border-collapse text-left">
             <caption className="sr-only">
               Comparison of Starter, Professional, and Premium website packages
@@ -66,7 +67,7 @@ function ComparisonTable() {
               ))}
             </tbody>
           </table>
-        </div>
+        </FadeIn>
 
         <p className="mt-3 text-center text-xs text-slate-500 md:hidden">
           Swipe horizontally to view the full comparison.

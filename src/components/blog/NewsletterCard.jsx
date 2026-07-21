@@ -1,11 +1,14 @@
 import { LockKeyhole, Send } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { subscribeToNewsletter } from "../../services/newsletterService";
+import { buttonHover, buttonTap } from "../../utils/motionVariants";
 
 function NewsletterCard() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState("idle");
   const [message, setMessage] = useState("");
+  const reduceMotion = useReducedMotion();
 
   async function handleSubmit(event) {
     event.preventDefault();
@@ -90,21 +93,30 @@ function NewsletterCard() {
           }`}
         />
 
-        <button
+        <motion.button
           type="submit"
           disabled={status === "loading"}
+          whileHover={
+            reduceMotion || status === "loading" ? undefined : buttonHover
+          }
+          whileTap={
+            reduceMotion || status === "loading" ? undefined : buttonTap
+          }
           className="focus-visible-ring mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {status === "loading" ? "Subscribing..." : "Subscribe Now"}
 
           <Send size={16} aria-hidden="true" />
-        </button>
+        </motion.button>
 
         {message && (
-          <p
+          <motion.p
             id="newsletter-status-message"
             role="status"
             aria-live="polite"
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.22 }}
             className={`mt-3 rounded-lg border px-3 py-2 text-xs leading-5 ${
               status === "success"
                 ? "border-emerald-400/30 bg-emerald-500/15 text-emerald-200"
@@ -112,7 +124,7 @@ function NewsletterCard() {
             }`}
           >
             {message}
-          </p>
+          </motion.p>
         )}
       </form>
 

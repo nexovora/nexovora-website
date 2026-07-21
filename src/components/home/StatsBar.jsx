@@ -4,6 +4,9 @@ import {
   Layers3,
   ListChecks,
 } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
+import StaggerContainer from "../animations/StaggerContainer";
+import { cardHover, fadeInVariant } from "../../utils/motionVariants";
 
 const stats = [
   {
@@ -29,13 +32,21 @@ const stats = [
 ];
 
 function StatsBar() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="pb-16">
       <div className="section-container">
-        <div className="grid overflow-hidden rounded-3xl bg-gradient-to-r from-[#06142E] to-[#0B2A63] p-6 text-white shadow-xl shadow-blue-950/10 sm:grid-cols-2 lg:grid-cols-4 lg:p-8">
+        <StaggerContainer className="grid overflow-hidden rounded-3xl bg-gradient-to-r from-[#06142E] to-[#0B2A63] p-6 text-white shadow-xl shadow-blue-950/10 sm:grid-cols-2 lg:grid-cols-4 lg:p-8">
           {stats.map(({ value, label, icon: Icon }, index) => (
-            <div
+            <motion.div
               key={label}
+              variants={
+                reduceMotion
+                  ? undefined
+                  : fadeInVariant({ direction: "up", distance: 16 })
+              }
+              whileHover={reduceMotion ? undefined : cardHover}
               className={`flex items-center gap-4 px-4 py-5 ${
                 index > 0 ? "lg:border-l lg:border-white/10" : ""
               }`}
@@ -48,9 +59,9 @@ function StatsBar() {
                 <p className="font-heading text-2xl font-bold">{value}</p>
                 <p className="mt-1 text-xs text-blue-100">{label}</p>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </StaggerContainer>
       </div>
     </section>
   );

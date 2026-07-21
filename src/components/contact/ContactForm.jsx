@@ -1,4 +1,5 @@
 import { LockKeyhole, Send } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import {
   budgetOptions,
@@ -6,6 +7,7 @@ import {
   timelineOptions,
 } from "../../data/contactPageData";
 import { submitContactForm } from "../../services/contactService";
+import { buttonHover, buttonTap } from "../../utils/motionVariants";
 
 const initialForm = {
   fullName: "",
@@ -23,6 +25,7 @@ function ContactForm() {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("idle");
   const [serverMessage, setServerMessage] = useState("");
+  const reduceMotion = useReducedMotion();
 
   function updateField(event) {
     const { name, value } = event.target;
@@ -299,8 +302,11 @@ function ContactForm() {
         </div>
 
         {serverMessage && (
-          <p
+          <motion.p
             role="status"
+            initial={reduceMotion ? false : { opacity: 0, scale: 0.98 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.22 }}
             className={`mt-5 rounded-xl border px-4 py-3 text-sm leading-6 ${
               status === "success"
                 ? "border-emerald-200 bg-emerald-50 text-emerald-700"
@@ -308,18 +314,24 @@ function ContactForm() {
             }`}
           >
             {serverMessage}
-          </p>
+          </motion.p>
         )}
 
-        <button
+        <motion.button
           type="submit"
           disabled={status === "loading"}
+          whileHover={
+            reduceMotion || status === "loading" ? undefined : buttonHover
+          }
+          whileTap={
+            reduceMotion || status === "loading" ? undefined : buttonTap
+          }
           className="focus-visible-ring mt-6 inline-flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-70"
         >
           {status === "loading" ? "Sending..." : "Send Message"}
 
           <Send size={17} aria-hidden="true" />
-        </button>
+        </motion.button>
 
         <p className="mt-4 flex items-center justify-center gap-2 text-center text-xs text-slate-500">
           <LockKeyhole size={14} aria-hidden="true" />

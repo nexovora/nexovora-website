@@ -9,6 +9,7 @@ import { NavLink, useParams } from "react-router-dom";
 import SEO from "../components/common/SEO";
 import BlogNewsletterCTA from "../components/blog/BlogNewsletterCTA";
 import PageLayout from "../components/layout/PageLayout";
+import FadeIn from "../components/animations/FadeIn";
 import {
   categoryIcons,
   getPostBySlug,
@@ -73,7 +74,7 @@ function BlogPostPage() {
                   Back to Blog
                 </NavLink>
 
-                <div className="mx-auto mt-8 max-w-4xl text-center">
+                <FadeIn className="mx-auto mt-8 max-w-4xl text-center">
                   <span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-xs font-bold text-blue-600">
                     <CategoryIcon size={14} />
                     {post.category}
@@ -103,18 +104,20 @@ function BlogPostPage() {
                       {post.readingTime}
                     </span>
                   </div>
-                </div>
+                </FadeIn>
               </div>
             </header>
 
             <div className="section-container py-16">
-              <div
+              <FadeIn
                 className={`mx-auto flex aspect-video max-w-5xl items-center justify-center rounded-3xl bg-gradient-to-br ${post.accent} text-white shadow-xl`}
               >
                 <CategoryIcon size={72} />
-              </div>
+              </FadeIn>
 
-              <div className="mx-auto mt-12 max-w-3xl rounded-3xl border border-blue-100 bg-blue-50/70 p-8 text-center">
+              <FadeIn
+                className="mx-auto mt-12 max-w-3xl rounded-3xl border border-blue-100 bg-blue-50/70 p-8 text-center"
+              >
                 <h2 className="font-heading text-2xl font-bold text-slate-950">
                   Article Coming Soon
                 </h2>
@@ -123,7 +126,7 @@ function BlogPostPage() {
                   This article page is ready. The full verified content will be
                   published after writing and editorial review.
                 </p>
-              </div>
+              </FadeIn>
             </div>
           </article>
 

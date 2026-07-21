@@ -1,10 +1,16 @@
+import { motion, useReducedMotion } from "framer-motion";
 import { includedFeatures } from "../../data/pricingPageData";
+import FadeIn from "../animations/FadeIn";
+import StaggerContainer from "../animations/StaggerContainer";
+import { fadeInVariant } from "../../utils/motionVariants";
 
 function IncludedFeatures() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="pb-16">
       <div className="section-container">
-        <div className="rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-50 to-white p-7 sm:p-9">
+        <FadeIn className="rounded-3xl border border-blue-100 bg-gradient-to-r from-blue-50 to-white p-7 sm:p-9">
           <div className="text-center">
             <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
               Standard Benefits
@@ -15,10 +21,15 @@ function IncludedFeatures() {
             </h2>
           </div>
 
-          <div className="mt-9 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-6">
+          <StaggerContainer className="mt-9 grid grid-cols-2 gap-5 md:grid-cols-3 lg:grid-cols-6">
             {includedFeatures.map(({ label, icon: Icon }, index) => (
-              <div
+              <motion.div
                 key={label}
+                variants={
+                  reduceMotion
+                    ? undefined
+                    : fadeInVariant({ direction: "up", distance: 14 })
+                }
                 className={`text-center ${
                   index > 0 ? "lg:border-l lg:border-slate-200" : ""
                 }`}
@@ -30,10 +41,10 @@ function IncludedFeatures() {
                 <p className="mt-3 text-sm font-semibold leading-5 text-slate-800">
                   {label}
                 </p>
-              </div>
+              </motion.div>
             ))}
-          </div>
-        </div>
+          </StaggerContainer>
+        </FadeIn>
       </div>
     </section>
   );

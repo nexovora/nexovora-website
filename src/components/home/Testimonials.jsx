@@ -1,11 +1,17 @@
 import { Quote } from "lucide-react";
+import { motion, useReducedMotion } from "framer-motion";
 import { testimonialsData } from "../../data/testimonialsData";
+import FadeIn from "../animations/FadeIn";
+import StaggerContainer from "../animations/StaggerContainer";
+import { cardHover, fadeInVariant } from "../../utils/motionVariants";
 
 function Testimonials() {
+  const reduceMotion = useReducedMotion();
+
   return (
     <section className="section-padding bg-white">
       <div className="section-container">
-        <div className="mx-auto max-w-2xl text-center">
+        <FadeIn className="mx-auto max-w-2xl text-center">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-blue-600">
             Client Feedback
           </p>
@@ -18,13 +24,19 @@ function Testimonials() {
             Genuine testimonials will be published here as Nexovora completes
             client projects and receives permission to share feedback.
           </p>
-        </div>
+        </FadeIn>
 
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
+        <StaggerContainer className="mt-12 grid gap-5 md:grid-cols-3">
           {testimonialsData.map((testimonial) => (
-            <article
+            <motion.article
               key={testimonial.id}
-              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_12px_36px_rgba(15,23,42,0.05)]"
+              variants={
+                reduceMotion
+                  ? undefined
+                  : fadeInVariant({ direction: "up", distance: 18 })
+              }
+              whileHover={reduceMotion ? undefined : cardHover}
+              className="rounded-2xl border border-slate-200 bg-white p-6 shadow-[0_12px_36px_rgba(15,23,42,0.05)] transition-shadow hover:shadow-[0_18px_46px_rgba(15,23,42,0.08)]"
             >
               <Quote size={34} className="text-blue-600" />
 
@@ -41,9 +53,9 @@ function Testimonials() {
                   {testimonial.role}
                 </p>
               </div>
-            </article>
+            </motion.article>
           ))}
-        </div>
+        </StaggerContainer>
 
         <div className="mt-8 flex justify-center gap-2" aria-hidden="true">
           <span className="h-2 w-7 rounded-full bg-blue-600" />
